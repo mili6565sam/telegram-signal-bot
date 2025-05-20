@@ -1,0 +1,32 @@
+import os
+import telebot
+from datetime import datetime
+
+TOKEN = os.getenv("BOT_TOKEN")  # توکن رو از محیط بگیره (امن‌تره)
+bot = telebot.TeleBot(TOKEN, parse_mode='HTML')
+
+@bot.message_handler(commands=['signal'])
+def send_signal(message):
+    signal = {
+        'symbol': 'XAUUSD',
+        'entry': '2340.50',
+        'tp1': '2345.00',
+        'tp2': '2350.00',
+        'sl': '2335.00',
+        'time': datetime.now().strftime('%Y-%m-%d %H:%M'),
+        'type': 'خرید'
+    }
+    msg = f"""
+📢 <b>سیگنال {signal['symbol']}</b>
+
+🟢 <b>ورود:</b> {signal['entry']}
+🎯 <b>تارگت 1:</b> {signal['tp1']}
+🎯 <b>تارگت 2:</b> {signal['tp2']}
+⛔️ <b>استاپ:</b> {signal['sl']}
+
+⏰ <b>زمان:</b> {signal['time']}
+📈 <b>نوع:</b> {signal['type']}
+"""
+    bot.reply_to(message, msg)
+
+bot.infinity_polling()
